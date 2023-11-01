@@ -20,7 +20,7 @@ const getInfo = {
   nested: (element, iter, path) => iter(element.children, [...path, element.key]),
 };
 
-const plain = (tree) => {
+const makePlain = (tree) => {
   const iter = (node, path) => {
     const dataToString = node.flatMap((elem) => getInfo[elem.type](elem, iter, path));
     return dataToString.join('\n');
@@ -28,4 +28,4 @@ const plain = (tree) => {
   return iter(tree, []);
 };
 
-export default plain;
+export default makePlain;
