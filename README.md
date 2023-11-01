@@ -18,24 +18,16 @@
     npm link
 
 ### Use:
-``•$ gendiff <filepath1> <filepath2>:`` show diff with default format (default: "stylish")
-``
-
-``
+•$ gendiff <filepath1> <filepath2>:`` show diff with default format (default: "stylish")
 •$ gendiff -f, --format [plain, json, stylish] <filepath1> <filepath2>:`` show diff with plain, json or stylish format
-``
-
-``
 •$ gendiff -h, --help:`` display help for command
-``
 
 ``
 Usage: gendiff [options] <filepath1> <filepath2>``
 ``
 
-``
+
 Compares two configuration files and shows a difference.
-``
 
 ``
 Options:
