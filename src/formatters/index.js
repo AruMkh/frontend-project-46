@@ -2,12 +2,12 @@ import stylish from './stylish.js';
 import plain from './plain.js';
 
 const format = (tree, formatFile) => {
-  const objWithFormats = {
+  const parserByFormat = {
     stylish: stylish(tree),
     plain: plain(tree),
     json: JSON.stringify(tree),
   };
-  return objWithFormats[formatFile];
+  return parserByFormat[formatFile];
 };
 
 export default format;
