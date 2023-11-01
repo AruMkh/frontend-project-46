@@ -22,11 +22,11 @@ $ gendiff <filepath1> <filepath2>: show diff with default format (default: "styl
 $ gendiff -f, --format [plain, json, stylish] <filepath1> <filepath2>: show diff with plain, json or stylish format
 $ gendiff -h, --help: display help for command
 
-Usage: gendiff [options] <filepath1> <filepath2>
+    Usage: gendiff [options] <filepath1> <filepath2>
 
-Compares two configuration files and shows a difference.
+    Compares two configuration files and shows a difference.
    
-Options:
--V, --version         output the version number
--f, --format, <type>  output format (default: "stylish")
--h, --help            output usage information
+    Options:
+    -V, --version         output the version number
+    -f, --format, <type>  output format (default: "stylish")
+    -h, --help            output usage information
