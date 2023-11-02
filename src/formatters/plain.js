@@ -1,31 +1,45 @@
-import _ from 'lodash';
+import {
+  KEY_UNCHANGED,
+  KEY_ADDED,
+  KEY_DELETED,
+  KEY_UPDATED,
+  KEY_NESTED_DIFF,
+} from '../consts.js';
 
-const getValue = (obj) => {
-  if (_.isString(obj)) {
-    return `'${obj}'`;
-  }
-  if (_.isObject(obj)) {
+const formatValue = (value) => {
+  if (typeof value === 'object' && value !== null) {
     return '[complex value]';
   }
-  return obj;
+  if (typeof value === 'string') {
+    return `'${value}'`;
+  }
+  return value;
 };
 
-const getPath = (acc, prop) => [...acc, prop].join('.');
+const getDiffLines = (diff, parents) => {
+  const keyPrefix = parents !== '' ? `${parents}.` : '';
 
-const getInfo = {
-  added: (element, iter, path) => `Property '${getPath(path, element.key)}' was added with value: ${getValue(element.value)}`,
-  deleted: (element, iter, path) => `Property '${getPath(path, element.key)}' was removed`,
-  updated: (element, iter, path) => `Property '${getPath(path, element.key)}' was updated. From ${getValue(element.oldValue)} to ${getValue(element.value)}`,
-  unchanged: () => [],
-  nested: (element, iter, path) => iter(element.children, [...path, element.key]),
+  const lines = diff.map((currDiff) => {
+    if (currDiff.keyStatus === KEY_UNCHANGED) {
+      return '';
+    }
+    const key = `${keyPrefix}${currDiff.key}`;
+    switch (currDiff.keyStatus) {
+      case KEY_ADDED:
+        return `Property '${key}' was added with value: ${formatValue(currDiff.second)}`;
+      case KEY_DELETED:
+        return `Property '${key}' was removed`;
+      case KEY_UPDATED:
+        return `Property '${key}' was updated. From ${formatValue(currDiff.first)} to ${formatValue(currDiff.second)}`;
+      case KEY_NESTED_DIFF:
+        return getDiffLines(currDiff.nestedDiff, key);
+      default:
+        throw new Error(`unknown key status: ${currDiff.keyStatus}`);
+    }
+  });
+  return lines.filter((elem) => elem !== '').flat();
 };
 
-const makePlain = (tree) => {
-  const iter = (node, path) => {
-    const dataToString = node.flatMap((elem) => getInfo[elem.type](elem, iter, path));
-    return dataToString.join('\n');
-  };
-  return iter(tree, []);
-};
+const plainFormatter = (diff) => getDiffLines(diff, '').join('\n');
 
-export default makePlain;
+export default plainFormatter;
