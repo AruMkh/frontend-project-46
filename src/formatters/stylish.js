@@ -1,36 +1,50 @@
-import _ from 'lodash';
+import {
+  KEY_UNCHANGED,
+  KEY_ADDED,
+  KEY_DELETED,
+  KEY_UPDATED,
+  KEY_NESTED_DIFF,
+} from '../consts.js';
 
-const getIndent = (depth, defaultSpace = 4) => ' '.repeat(depth * defaultSpace - 2);
+const formatLine = (idents, sign, key, value) => `${idents}${sign} ${key}: ${value}\n`;
 
-const stringify = (obj, depth) => {
-  if (!_.isObject(obj)) {
-    return obj;
+const formatValue = (val, nestingLevel) => {
+  if (typeof val === 'object' && val !== null) {
+    const objectKeys = Object.keys(val);
+    const idents = ' '.repeat((nestingLevel + 1) * 4);
+    const result = objectKeys.map((key) => `${idents}${key}: ${formatValue(val[key], nestingLevel + 1)}\n`).join('');
+    const bracketIdents = ' '.repeat(nestingLevel * 4);
+    return `{\n${result}${bracketIdents}}`;
   }
-  const objectToString = Object.entries(obj, depth)
-    .map(([key, value]) => `${getIndent(depth + 1)}  ${key}: ${stringify(value, depth + 1)}`);
-  return `{\n${objectToString.join('\n')}\n${getIndent(depth)}  }`;
+  return val;
 };
 
-const makeInfo = {
-  nested: (element, depth, iter) => {
-    const value = iter(element.children, depth + 1);
-    return `${getIndent(depth)}  ${element.key}: ${value}\n${getIndent(depth)}  }`;
-  },
-  unchanged: (element, depth) => `${getIndent(depth)}  ${element.key}: ${stringify(element.value, depth)}`,
-  deleted: (element, depth) => `${getIndent(depth)}- ${element.key}: ${stringify(element.value, depth)}`,
-  added: (element, depth) => `${getIndent(depth)}+ ${element.key}: ${stringify(element.value, depth)}`,
-  updated: (element, depth) => [
-    `${getIndent(depth)}- ${element.key}: ${stringify(element.oldValue, depth)}`,
-    `${getIndent(depth)}+ ${element.key}: ${stringify(element.value, depth)}`,
-  ],
+const formatObjectDiff = (objectDiff, nestingLevel) => {
+  const idents = ' '.repeat(nestingLevel * 4 + 2);
+  const lines = objectDiff.map((currDiff) => {
+    switch (currDiff.keyStatus) {
+      case KEY_UNCHANGED:
+        return formatLine(idents, ' ', currDiff.key, formatValue(currDiff.first, nestingLevel + 1));
+      case KEY_ADDED:
+        return formatLine(idents, '+', currDiff.key, formatValue(currDiff.second, nestingLevel + 1));
+      case KEY_DELETED:
+        return formatLine(idents, '-', currDiff.key, formatValue(currDiff.first, nestingLevel + 1));
+      case KEY_UPDATED:
+        return [
+          formatLine(idents, '-', currDiff.key, formatValue(currDiff.first, nestingLevel + 1)),
+          formatLine(idents, '+', currDiff.key, formatValue(currDiff.second, nestingLevel + 1)),
+        ];
+      case KEY_NESTED_DIFF:
+        return formatLine(idents, ' ', currDiff.key, formatObjectDiff(currDiff.nestedDiff, nestingLevel + 1));
+      default:
+        throw new Error(`Unknown key status: ${currDiff.keyStatus}`);
+    }
+  });
+  const result = lines.flat().join('');
+  const lastIdents = ' '.repeat(nestingLevel * 4);
+  return `{\n${result}${lastIdents}}`;
 };
 
-const stylish = (tree) => {
-  const iter = (node, depth) => {
-    const dataToString = node.flatMap((elem) => makeInfo[elem.type](elem, depth, iter));
-    return `{\n${dataToString.join('\n')}`;
-  };
-  return `${iter(tree, 1)}\n}`;
-};
+const stylishFormatter = (diff) => formatObjectDiff(diff, 0);
 
-export default stylish;
+export default stylishFormatter;
