@@ -1,17 +1,10 @@
+lint:
+	npx eslint
 install:
 	npm ci
-
-gendiff:
-	node/gendiff.js
-
-publish:
-	npm publish --dry-run
-
-lint:
-	npx eslint .
-
+link:
+	npm link
 test:
-	npx jest
-
+	npm test
 test-coverage:
-	npx jest --coverage
+	npm test -- --coverage --coverageProvider=v8
