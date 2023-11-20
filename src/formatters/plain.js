@@ -30,9 +30,9 @@ const getDiffLines = (diff, parents) => {
       case KEY_DELETED:
         return `Property '${key}' was removed`;
       case KEY_UPDATED:
-        return `Property '${key}' was updated. From ${formatValue(currDiff.first)} to ${formatValue(currDiff.value2)}`;
+        return `Property '${key}' was updated. From ${formatValue(currDiff.value1)} to ${formatValue(currDiff.value2)}`;
       case KEY_NESTED_DIFF:
-        return getDiffLines(currDiff.nestedDiff, key);
+        return getDiffLines(currDiff.children, key);
       default:
         throw new Error(`unknown key status: ${currDiff.keyStatus}`);
     }
