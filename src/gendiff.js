@@ -49,7 +49,6 @@ const genDiff = (data1, data2) => {
       value1: value1,
       value2: value2,
     };
-  });
 };
 
 const fileGendiff = (filepath1, filepath2, format = 'stylish') => {
