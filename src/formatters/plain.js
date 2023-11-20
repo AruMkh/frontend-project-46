@@ -26,11 +26,11 @@ const getDiffLines = (diff, parents) => {
     const key = `${keyPrefix}${currDiff.key}`;
     switch (currDiff.keyStatus) {
       case KEY_ADDED:
-        return `Property '${key}' was added with value: ${formatValue(currDiff.second)}`;
+        return `Property '${key}' was added with value: ${formatValue(currDiff.value2)}`;
       case KEY_DELETED:
         return `Property '${key}' was removed`;
       case KEY_UPDATED:
-        return `Property '${key}' was updated. From ${formatValue(currDiff.first)} to ${formatValue(currDiff.second)}`;
+        return `Property '${key}' was updated. From ${formatValue(currDiff.first)} to ${formatValue(currDiff.value2)}`;
       case KEY_NESTED_DIFF:
         return getDiffLines(currDiff.nestedDiff, key);
       default:
