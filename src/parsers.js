@@ -1,7 +1,6 @@
 import { load } from 'js-yaml';
 
 const parseFile = (data, fileExt) => {
-
   switch (fileExt) {
     case 'json':
       return JSON.parse(data);
