@@ -31,9 +31,8 @@ const genDiff = (data1, data2) => {
         children: genDiff(value1, value2),
       };
     }
-    if (!data2hasproparty) {
+    if (!data2hasproparty)
       return { keyStatus: KEY_DELETED, key, value1: value1 };
-    }
     if (!data1hasproparty) {
       return { keyStatus: KEY_ADDED, key, value2: value2 };
     }
