@@ -30,6 +30,7 @@ const genDiff = (data1, data2) => {
           key,
           children: genDiff(value1, value2),
         };
+    }
     if (!data2hasproparty) {
         return { keyStatus: KEY_DELETED, key, first: value1 };
     }
@@ -49,6 +50,7 @@ const genDiff = (data1, data2) => {
       value1: value1,
       value2: value2,
     };
+  });
 };
 
 const fileGendiff = (filepath1, filepath2, format = 'stylish') => {
