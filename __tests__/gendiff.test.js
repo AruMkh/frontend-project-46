@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { readFileSync } from 'fs';
 
-import parseFilesAndGenDiff from '../src/gendiff';
+import fileGendiff from '../src/gendiff';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,7 +13,7 @@ test('gendiff-json', () => {
   const filepath2 = `${__dirname}/../__fixtures__/file2.json`;
   const expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_stylish.txt`;
   const expected = readFileSync(expectedPath).toString();
-  expect(parseFilesAndGenDiff(filepath1, filepath2)).toStrictEqual(expected);
+  expect(fileGendiff(filepath1, filepath2)).toStrictEqual(expected);
 });
 
 test('gendiff-yaml', () => {
@@ -21,7 +21,7 @@ test('gendiff-yaml', () => {
   const filepath2 = `${__dirname}/../__fixtures__/file2.yml`;
   const expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_stylish.txt`;
   const expected = readFileSync(expectedPath).toString();
-  expect(parseFilesAndGenDiff(filepath1, filepath2)).toStrictEqual(expected);
+  expect(fileGendiff(filepath1, filepath2)).toStrictEqual(expected);
 });
 
 test('gendiff-json-format-plain', () => {
@@ -29,7 +29,7 @@ test('gendiff-json-format-plain', () => {
   const filepath2 = `${__dirname}/../__fixtures__/file2.json`;
   const expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_plain.txt`;
   const expected = readFileSync(expectedPath).toString();
-  expect(parseFilesAndGenDiff(filepath1, filepath2, 'plain')).toStrictEqual(expected);
+  expect(fileGendiff(filepath1, filepath2, 'plain')).toStrictEqual(expected);
 });
 
 test('gendiff-json-format-json', () => {
@@ -37,5 +37,5 @@ test('gendiff-json-format-json', () => {
   const filepath2 = `${__dirname}/../__fixtures__/file2.json`;
   const expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_json.txt`;
   const expected = readFileSync(expectedPath).toString();
-  expect(parseFilesAndGenDiff(filepath1, filepath2, 'json')).toStrictEqual(expected);
+  expect(fileGendiff(filepath1, filepath2, 'json')).toStrictEqual(expected);
 });
