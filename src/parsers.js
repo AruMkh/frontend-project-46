@@ -2,9 +2,7 @@ import { readFileSync } from 'fs';
 import { load } from 'js-yaml';
 import _ from 'lodash';
 
-const parseFile = (filepath) => {
-  const data = readFileSync(filepath);
-  const fileExt = _.last(filepath.split('.'));
+const parseFile = (data, fileExt) => {
 
   switch (fileExt) {
     case 'json':
