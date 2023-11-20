@@ -1,4 +1,3 @@
-import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import _ from 'lodash';
 
@@ -21,54 +20,46 @@ const genDiff = (data1, data2) => {
   return sortedKeys.map((key) => {
     const value1 = data1[key];
     const value2 = data2[key];
-    const data1hasproparty = _.has(data1, key);
-    const data2hasproparty = _.has(data2, key);
-
-  if (typeof value1 === 'object' && value1 !== null && typeof value2 === 'object' && value2 != null) {
+    if (Object.prototype.hasOwnProperty.call(data1, key)
+        && Object.prototype.hasOwnProperty.call(data2, key)) {
+      if (typeof value1 === 'object' && value1 !== null && typeof value2 === 'object' && value2 != null) {
+        return {
+          keyStatus: KEY_NESTED_DIFF,
+          key,
+          children: genDiff(value1, value2),
+        };
+      }
+      if (value1 === value2) {
+        return {
+          keyStatus: KEY_UNCHANGED,
+          key,
+          value1: value1,
+        };
+      }
       return {
-        keyStatus: KEY_NESTED_DIFF,
-        key,
-        children: genDiff(value1, value2),
-      };
-  }
-  if (!data2hasproparty) {
-      return { keyStatus: KEY_DELETED, key, value1: value1 };
-  }
-  if (!data1hasproparty) {
-      return { keyStatus: KEY_ADDED, key, value2: value2 };
-  }
-  if (value1 === value2) {
-      return {
-        keyStatus: KEY_UNCHANGED,
+        keyStatus: KEY_UPDATED,
         key,
         value1: value1,
+        value2: value2,
       };
-  }
-  return {
-    keyStatus: KEY_UPDATED,
-    key,
-    value1: value1,
-    value2: value2,
-    };
+    }
+    if (Object.prototype.hasOwnProperty.call(data1, key)) {
+      return { keyStatus: KEY_DELETED, key, value1: value1 };
+    }
+    return { keyStatus: KEY_ADDED, key, value2: value2 };
   });
 };
 
-const fileGendiff = (filepath1, filepath2, format = 'stylish') => {
+const parseFilesAndGenDiff = (filepath1, filepath2, format = 'stylish') => {
   const absolutePath1 = resolve(filepath1);
   const absolutePath2 = resolve(filepath2);
 
-  const fileData1 = readFileSync(absolutePath1);
-  const fileExt1 = _.last(absolutePath1.split('.'));
-
-  const fileData2 = readFileSync(absolutePath2);
-  const fileExt2 = _.last(absolutePath2.split('.'));
-
-  const data1 = parseFile(fileData1, fileExt1);
-  const data2 = parseFile(fileData2, fileExt2);
+  const data1 = parseFile(absolutePath1);
+  const data2 = parseFile(absolutePath2);
   const result = genDiff(data1, data2);
 
   const formatter = getFormatter(format);
   return formatter(result);
 };
 
-export default fileGendiff;
+export default parseFilesAndGenDiff;
