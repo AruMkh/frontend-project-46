@@ -10,7 +10,7 @@ import _ from 'lodash';
 const formatLine = (idents, sign, key, value) => `${idents}${sign} ${key}: ${value}\n`;
 
 const formatValue = (val, nestingLevel) => {
-  if (_.isObject(val) && _.isNull(val)) {
+  if (_.isObject(val) && !_.isNull(val)) {
     const objectKeys = Object.keys(val);
     const idents = ' '.repeat((nestingLevel + 1) * 4);
     const result = objectKeys.map((key) => `${idents}${key}: ${formatValue(val[key], nestingLevel + 1)}\n`).join('');
