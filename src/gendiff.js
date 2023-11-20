@@ -60,7 +60,7 @@ const fileGendiff = (filepath1, filepath2, format = 'stylish') => {
 
   const fileData2 = readFileSync(absolutePath2);
   const fileExt2 = _.last(absolutePath2.split('.'));
-  
+
   const data1 = parseFile(fileData1, fileExt1);
   const data2 = parseFile(fileData2, fileExt2);
   const result = genDiff(data1, data2);
