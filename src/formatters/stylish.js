@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   KEY_UNCHANGED,
   KEY_ADDED,
@@ -5,7 +6,6 @@ import {
   KEY_UPDATED,
   KEY_NESTED_DIFF,
 } from '../consts.js';
-import _ from 'lodash';
 
 const formatLine = (idents, sign, key, value) => `${idents}${sign} ${key}: ${value}\n`;
 
