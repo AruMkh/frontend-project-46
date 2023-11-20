@@ -19,35 +19,35 @@ const genDiff = (data1, data2) => {
   const sortedKeys = _.sortBy(allKeys);
 
   return sortedKeys.map((key) => {
-    const value1 = data1[key];
-    const value2 = data2[key];
+    const val1 = data1[key];
+    const val2 = data2[key];
     if (Object.prototype.hasOwnProperty.call(data1, key)
         && Object.prototype.hasOwnProperty.call(data2, key)) {
-      if (typeof value1 === 'object' && value1 !== null && typeof value2 === 'object' && value2 != null) {
+      if (typeof val1 === 'object' && val1 !== null && typeof val2 === 'object' && val2 != null) {
         return {
           keyStatus: KEY_NESTED_DIFF,
           key,
-          children: genDiff(value1, value2),
+          children: genDiff(val1, val2),
         };
       }
-      if (value1 === value2) {
+      if (val1 === val2) {
         return {
           keyStatus: KEY_UNCHANGED,
           key,
-          value1: value1,
+          value1: val1,
         };
       }
       return {
         keyStatus: KEY_UPDATED,
         key,
-        value1: value1,
-        value2: value2,
+        value1: val1,
+        value2: val2,
       };
     }
     if (Object.prototype.hasOwnProperty.call(data1, key)) {
-      return { keyStatus: KEY_DELETED, key, value1: value1 };
+      return { keyStatus: KEY_DELETED, key, value1: val1 };
     }
-    return { keyStatus: KEY_ADDED, key, value2: value2 };
+    return { keyStatus: KEY_ADDED, key, value2: val2 };
   });
 };
 
