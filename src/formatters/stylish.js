@@ -18,7 +18,7 @@ const formatValue = (val, nestingLevel) => {
     const bracketIdents = ' '.repeat(nestingLevel * spaceMultiplier);
     return `{\n${result}${bracketIdents}}`;
   }
-  return val;
+  return val.toString();
 };
 
 const formatObjectDiff = (objectDiff, nestingLevel) => {
