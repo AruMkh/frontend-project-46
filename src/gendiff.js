@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import _ from 'lodash';
 
