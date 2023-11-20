@@ -50,7 +50,7 @@ const genDiff = (data1, data2) => {
   });
 };
 
-const parseFilesAndGenDiff = (filepath1, filepath2, format = 'stylish') => {
+const genDiff = (filepath1, filepath2, format = 'stylish') => {
   const absolutePath1 = resolve(filepath1);
   const absolutePath2 = resolve(filepath2);
 
@@ -68,4 +68,4 @@ const parseFilesAndGenDiff = (filepath1, filepath2, format = 'stylish') => {
   return formatter(result);
 };
 
-export default parseFilesAndGenDiff;
+export default genDiff;
