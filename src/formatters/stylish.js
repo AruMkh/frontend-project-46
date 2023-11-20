@@ -8,20 +8,21 @@ import {
 } from '../consts.js';
 
 const formatLine = (idents, sign, key, value) => `${idents}${sign} ${key}: ${value}\n`;
+const spaceMultiplier = 4;
 
 const formatValue = (val, nestingLevel) => {
   if (_.isObject(val) && !_.isNull(val)) {
     const objectKeys = Object.keys(val);
-    const idents = ' '.repeat((nestingLevel + 1) * 4);
+    const idents = ' '.repeat((nestingLevel + 1) * spaceMultiplier);
     const result = objectKeys.map((key) => `${idents}${key}: ${formatValue(val[key], nestingLevel + 1)}\n`).join('');
-    const bracketIdents = ' '.repeat(nestingLevel * 4);
+    const bracketIdents = ' '.repeat(nestingLevel * spaceMultiplier);
     return `{\n${result}${bracketIdents}}`;
   }
   return val;
 };
 
 const formatObjectDiff = (objectDiff, nestingLevel) => {
-  const idents = ' '.repeat(nestingLevel * 4 + 2);
+  const idents = ' '.repeat(nestingLevel * spaceMultiplier + 2);
   const lines = objectDiff.map((currDiff) => {
     switch (currDiff.keyStatus) {
       case KEY_UNCHANGED:
@@ -42,7 +43,7 @@ const formatObjectDiff = (objectDiff, nestingLevel) => {
     }
   });
   const result = lines.flat().join('');
-  const lastIdents = ' '.repeat(nestingLevel * 4);
+  const lastIdents = ' '.repeat(nestingLevel * spaceMultiplier);
   return `{\n${result}${lastIdents}}`;
 };
 
