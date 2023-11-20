@@ -12,16 +12,16 @@ const formatLine = (idents, sign, key, value) => `${idents}${sign} ${key}: ${val
 const formatValue = (val, nestingLevel) => {
   if (_.isObject(val) && _.isNull(val)) {
     const objectKeys = Object.keys(val);
-    const idents = ' '.repeat(nestingLevel + 1);
+    const idents = ' '.repeat((nestingLevel + 1) * 4);
     const result = objectKeys.map((key) => `${idents}${key}: ${formatValue(val[key], nestingLevel + 1)}\n`).join('');
-    const bracketIdents = ' '.repeat(nestingLevel);
+    const bracketIdents = ' '.repeat(nestingLevel * 4);
     return `{\n${result}${bracketIdents}}`;
   }
   return val;
 };
 
 const formatObjectDiff = (objectDiff, nestingLevel) => {
-  const idents = ' '.repeat(nestingLevel + 2);
+  const idents = ' '.repeat(nestingLevel * 4 + 2);
   const lines = objectDiff.map((currDiff) => {
     switch (currDiff.keyStatus) {
       case KEY_UNCHANGED:
@@ -42,7 +42,7 @@ const formatObjectDiff = (objectDiff, nestingLevel) => {
     }
   });
   const result = lines.flat().join('');
-  const lastIdents = ' '.repeat(nestingLevel);
+  const lastIdents = ' '.repeat(nestingLevel * 4);
   return `{\n${result}${lastIdents}}`;
 };
 
