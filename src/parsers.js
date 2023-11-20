@@ -1,5 +1,4 @@
 import { load } from 'js-yaml';
-import _ from 'lodash';
 
 const parseFile = (data, fileExt) => {
 
