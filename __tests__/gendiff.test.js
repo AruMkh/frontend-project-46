@@ -8,34 +8,40 @@ import fileGendiff from '../src/gendiff';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-test('gendiff-json', () => {
-  const filepath1 = `${__dirname}/../__fixtures__/file1.json`;
-  const filepath2 = `${__dirname}/../__fixtures__/file2.json`;
-  const expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_stylish.txt`;
-  const expected = readFileSync(expectedPath).toString();
-  expect(fileGendiff(filepath1, filepath2)).toStrictEqual(expected);
-});
+const testCases = [
+  [
+    testName = 'gendiff-json',
+    filepath1 = `${__dirname}/../__fixtures__/file1.json`,
+    filepath2 = `${__dirname}/../__fixtures__/file2.json`,
+    expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_stylish.txt`,
+    format = 'stylish'
+  ],
+  [
+    testName = 'gendiff-yaml',
+    filepath1 = `${__dirname}/../__fixtures__/file1.yml`,
+    filepath2 = `${__dirname}/../__fixtures__/file2.yml`,
+    expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_stylish.txt`,
+    format = 'stylish'
+  ],
+  [
+    testName = 'gendiff-json-format-plain',
+    filepath1 = `${__dirname}/../__fixtures__/file1.json`,
+    filepath2 = `${__dirname}/../__fixtures__/file2.json`,
+    expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_plain.txt`,
+    format = 'plain'
+  ],
+  [
+    testName = 'gendiff-json-format-json',
+    filepath1 = `${__dirname}/../__fixtures__/file1.json`,
+    filepath2 = `${__dirname}/../__fixtures__/file2.json`,
+    expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_json.txt`,
+    format = 'json'
+  ]
+];
 
-test('gendiff-yaml', () => {
-  const filepath1 = `${__dirname}/../__fixtures__/file1.yml`;
-  const filepath2 = `${__dirname}/../__fixtures__/file2.yml`;
-  const expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_stylish.txt`;
-  const expected = readFileSync(expectedPath).toString();
-  expect(fileGendiff(filepath1, filepath2)).toStrictEqual(expected);
-});
-
-test('gendiff-json-format-plain', () => {
-  const filepath1 = `${__dirname}/../__fixtures__/file1.json`;
-  const filepath2 = `${__dirname}/../__fixtures__/file2.json`;
-  const expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_plain.txt`;
-  const expected = readFileSync(expectedPath).toString();
-  expect(fileGendiff(filepath1, filepath2, 'plain')).toStrictEqual(expected);
-});
-
-test('gendiff-json-format-json', () => {
-  const filepath1 = `${__dirname}/../__fixtures__/file1.json`;
-  const filepath2 = `${__dirname}/../__fixtures__/file2.json`;
-  const expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_json.txt`;
-  const expected = readFileSync(expectedPath).toString();
-  expect(fileGendiff(filepath1, filepath2, 'json')).toStrictEqual(expected);
-});
+test.each(testCases)(
+  (filepath1, filepath2, expectedPath, format) => {
+    const expected = readFileSync(expectedPath).toString();
+    expect(fileGendiff(filepath1, filepath2, format)).toStrictEqual(expected);
+  }
+);
