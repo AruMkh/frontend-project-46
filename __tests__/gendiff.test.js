@@ -14,29 +14,29 @@ const testCases = [
     `${__dirname}/../__fixtures__/file1.json`,
     `${__dirname}/../__fixtures__/file2.json`,
     `${__dirname}/../__fixtures__/file1_file2_diff_stylish.txt`,
-    'stylish'
+    'stylish',
   ],
   [
     'gendiff-yaml',
     `${__dirname}/../__fixtures__/file1.yml`,
     `${__dirname}/../__fixtures__/file2.yml`,
     `${__dirname}/../__fixtures__/file1_file2_diff_stylish.txt`,
-    'stylish'
+    'stylish',
   ],
   [
     'gendiff-json-format-plain',
     `${__dirname}/../__fixtures__/file1.json`,
     `${__dirname}/../__fixtures__/file2.json`,
     `${__dirname}/../__fixtures__/file1_file2_diff_plain.txt`,
-    'plain'
+    'plain',
   ],
   [
     'gendiff-json-format-json',
     `${__dirname}/../__fixtures__/file1.json`,
     `${__dirname}/../__fixtures__/file2.json`,
     `${__dirname}/../__fixtures__/file1_file2_diff_json.txt`,
-    'json'
-  ]
+    'json',
+  ],
 ];
 
 test.each(testCases)(
@@ -44,5 +44,5 @@ test.each(testCases)(
   (testName, filepath1, filepath2, expectedPath, format) => {
     const expected = readFileSync(expectedPath).toString();
     expect(fileGendiff(filepath1, filepath2, format)).toStrictEqual(expected);
-  }
+  },
 );
