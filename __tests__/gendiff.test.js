@@ -40,6 +40,7 @@ const testCases = [
 ];
 
 test.each(testCases)(
+  '%s',
   (testName, filepath1, filepath2, expectedPath, format) => {
     const expected = readFileSync(expectedPath).toString();
     expect(fileGendiff(filepath1, filepath2, format)).toStrictEqual(expected);
