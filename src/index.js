@@ -6,7 +6,7 @@ import genDiff from './gendiff.js';
 import parseFile from './parsers.js';
 import getFormatter from './formatters/index.js';
 
-const fileGendiff = (filepath1, filepath2, format = 'stylish') => {
+const fileGendiff = (filepath1, filepath2, format) => {
   const absolutePath1 = resolve(filepath1);
   const absolutePath2 = resolve(filepath2);
 
